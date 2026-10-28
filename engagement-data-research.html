@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ad reach &amp; engagement data - what is actually obtainable</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap'>
+<link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700&display=swap'>
+<style>
+:root {
+  --bg: #f6f6f3; --dot: #dad9d3; --card: #ffffff; --border: #e8e7e2;
+  --ink: #0b0b0b; --muted: #52514e; --soft: #f1f0ec;
+  --shadow: 0 1px 2px rgba(16,16,15,.04), 0 8px 24px rgba(16,16,15,.05);
+  --blue: #2a78d6; --orange: #eb6834; --green: #1baf7a; --red: #c2402f;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; color: var(--ink); background-color: var(--bg);
+  background-image: radial-gradient(var(--dot) 1px, transparent 1.2px);
+  background-size: 22px 22px;
+  font-family: 'Google Sans Flex', 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased; line-height: 1.6;
+}
+.page { max-width: 1000px; margin: 0 auto; padding: 48px 16px 64px; }
+h1, h2, h3 { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; letter-spacing: -0.02em; margin: 0; }
+h1 { font-size: 32px; font-weight: 700; line-height: 1.2; margin: 6px 0 8px; }
+h2 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+h3 { font-size: 15px; font-weight: 600; margin: 18px 0 6px; }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.lede { color: var(--muted); font-size: 15px; margin: 0; }
+header { margin-bottom: 28px; }
+p { margin: 10px 0; }
+a { color: var(--blue); text-decoration: none; border-bottom: 1px solid rgba(42,120,214,.3); }
+a:hover { border-bottom-color: var(--blue); }
+code { font-family: ui-monospace, 'Cascadia Code', Consolas, monospace; font-size: .88em;
+       background: var(--soft); padding: 1px 5px; border-radius: 5px; }
+pre { background: #1d1d1b; color: #eceae4; padding: 14px 16px; border-radius: 12px; overflow-x: auto;
+      font-family: ui-monospace, 'Cascadia Code', Consolas, monospace; font-size: 12.5px; line-height: 1.6; }
+pre code { background: none; padding: 0; color: inherit; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+        padding: 24px 26px; margin-bottom: 20px; box-shadow: var(--shadow); }
+.verdict { border-left: 4px solid var(--red); background: #fdf3f1; }
+.verdict h2 { color: #a32e20; }
+.key { border-left: 4px solid var(--green); background: #f0faf6; }
+.key h2 { color: #0a6d47; }
+.tag { display: inline-block; font-size: 10.5px; font-weight: 600; letter-spacing: .05em;
+       text-transform: uppercase; padding: 3px 8px; border-radius: 999px; vertical-align: middle;
+       margin-left: 8px; border: 1px solid; }
+.t-official { color: #0a6d47; background: #e8f6f0; border-color: #b6e0ce; }
+.t-verified { color: #1a4f8a; background: #e9f1fb; border-color: #bcd5f0; }
+.t-third    { color: #8a6412; background: #fdf6e6; border-color: #e4cfa3; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--muted); margin-top: 14px; }
+.legend span.tag { margin-left: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; margin: 14px 0 6px; }
+th, td { padding: 9px 11px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+thead th { font-weight: 600; color: var(--muted); font-size: 12px; text-transform: uppercase;
+           letter-spacing: .04em; border-bottom: 1px solid #ddddd7; }
+tbody tr:last-child td { border-bottom: none; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.no { color: var(--red); font-weight: 600; }
+.yes { color: #0a6d47; font-weight: 600; }
+.muted { color: var(--muted); }
+td.muted { font-style: italic; }
+.route { display: flex; gap: 14px; align-items: baseline; }
+.route .n { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 26px;
+            color: var(--border); line-height: 1; flex: none; }
+.chain { display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px; margin: 18px 0 8px; }
+.chain .step { flex: 1 1 170px; background: var(--soft); border: 1px solid var(--border);
+               border-radius: 12px; padding: 12px 14px; }
+.chain .step b { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; display: block; }
+.chain .step span { font-size: 12.5px; color: var(--muted); }
+.chain .arrow { align-self: center; color: var(--muted); font-size: 18px; flex: none; }
+ul { margin: 8px 0; padding-left: 20px; }
+li { margin: 5px 0; }
+.refs ol { padding-left: 20px; font-size: 13.5px; }
+.refs li { margin: 7px 0; }
+.refs .src { color: var(--muted); font-size: 12.5px; }
+footer { color: var(--muted); font-size: 12px; text-align: center; margin-top: 24px; }
+@media (max-width: 760px) {
+  h1 { font-size: 25px; } .card { padding: 18px 16px; }
+  .chain .arrow { display: none; }
+  table { font-size: 12.5px; } th, td { padding: 7px 6px; }
+}
+</style></head>
+<body><main class="page">
+
+<header>
+  <div class="eyebrow">Research note &middot; data sourcing</div>
+  <h1>Ad reach &amp; engagement data: what is actually obtainable</h1>
+  <p class="lede">For the debt-settlement study &mdash; correlating advertising exposure with
+     settlement outcomes. Compiled 28 October 2026.</p>
+  <div class="legend">
+    <span class="tag t-official">Official</span> platform's own documentation
+    <span class="tag t-verified">Verified live</span> queried directly, result reproduced here
+    <span class="tag t-third">Third-party</span> vendor or blog claim, unconfirmed
+  </div>
+</header>
+
+<section class="card verdict">
+  <h2>The finding that reshapes the study</h2>
+  <p><b>Neither Google nor Meta publishes impressions, likes or views for US commercial ads &mdash;
+  through any API, at any price.</b> This is not an access tier that can be bought into. Reach
+  disclosure exists only where a regulator compelled it:</p>
+  <ul>
+    <li><b>EU/EEA-delivered ads</b> carry reach figures because the Digital Services Act requires it.
+        Meta exposes <code>eu_total_reach</code> and demographic breakdowns; Google publishes
+        impression ranges per country and platform. Both are explicitly scoped to EU delivery.
+        <span class="tag t-official">Official</span></li>
+    <li><b>Political and issue ads</b> carry spend and impression ranges in any market.
+        <span class="tag t-official">Official</span></li>
+    <li><b>Everything else</b> &mdash; which is all five US debt-settlement advertisers in this study
+        &mdash; exposes creative, dates and page only.</li>
+  </ul>
+  <p>The metric the study was designed around does not exist in the public record for its subjects.
+  That is a design constraint, not a tooling problem to be solved with a better client.</p>
+</section>
+
+<section class="card">
+  <h2>What each source actually provides</h2>
+  <table>
+    <thead><tr>
+      <th>Source</th><th>Reach / engagement data</th><th>Scope limit</th>
+      <th>Cost</th><th>Provenance</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><b>Meta Ad Library API</b></td>
+        <td><code>eu_total_reach</code>, impression ranges, demographic breakdown</td>
+        <td>EU-delivered ads only; political/issue anywhere</td>
+        <td>Free</td>
+        <td><span class="tag t-official">Official</span></td>
+      </tr>
+      <tr>
+        <td><b>Google Ads Transparency Center</b></td>
+        <td>Impression ranges per country and platform</td>
+        <td>EEA only &mdash; no public API outside it</td>
+        <td>Free / via SearchAPI</td>
+        <td><span class="tag t-third">Third-party</span></td>
+      </tr>
+      <tr>
+        <td><b>Meta Marketing API<br>Google Ads API</b></td>
+        <td class="yes">Everything &mdash; impressions, reach, CTR, engagement</td>
+        <td class="no">Your own ad accounts only</td>
+        <td>Free</td>
+        <td><span class="tag t-official">Official</span></td>
+      </tr>
+      <tr>
+        <td><b>Meta Content Library</b></td>
+        <td>Reactions, shares, views, comments</td>
+        <td class="no">Organic posts only &mdash; contains no ads</td>
+        <td>Free on Meta SRE</td>
+        <td><span class="tag t-official">Official</span></td>
+      </tr>
+      <tr>
+        <td><b>Pathmatics / Sensor Tower,<br>Nielsen, MediaRadar, AdClarity</b></td>
+        <td><i>Modelled</i> impression and spend estimates</td>
+        <td>Panel extrapolation, not observed data</td>
+        <td>Enterprise, custom</td>
+        <td><span class="tag t-third">Third-party</span></td>
+      </tr>
+      <tr>
+        <td><b>CFPB Consumer Complaints</b></td>
+        <td>Complaints by company, month, state, issue</td>
+        <td>Outcome measure, not exposure</td>
+        <td class="yes">Free, no key</td>
+        <td><span class="tag t-verified">Verified live</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="card">
+  <div class="route"><span class="n">1</span><div>
+    <h2>Paid panel estimates</h2>
+    <p class="lede">Pathmatics (Sensor Tower), Nielsen Ad Intel, MediaRadar, Semrush AdClarity, Adyntel</p>
+  </div></div>
+
+  <h3>What they are</h3>
+  <p>None of these vendors receives impression data from Meta or Google. They run consumer panels,
+  observe which ads panelists are served, and extrapolate to population-level impressions. What you
+  buy is a model output, not a platform figure.</p>
+
+  <h3>What you would get</h3>
+  <p>Modelled US impressions and spend at brand level &mdash; the only thing resembling the target
+  metric. Pathmatics has an API but it is enterprise-tier on custom pricing. AdClarity is the cheapest
+  credible entry at roughly <b>$169/month</b> but exposes no public API. Adyntel is API-first and
+  priced per call, but returns ranges rather than exact figures.
+  <span class="tag t-third">Third-party</span></p>
+
+  <h3>The problem for this study specifically</h3>
+  <p>If impressions are the independent variable and they originate in a vendor's panel model, the
+  correlation being estimated is <i>between that model's output and the outcome</i> &mdash; not between
+  observed exposure and the outcome. Vendors do not fully disclose extrapolation methodology, so the
+  error cannot be characterised.</p>
+  <p>The sharper issue is coverage in the tail. Panel methods degrade as advertiser size falls, and
+  four of the five companies in this study are small. At roughly 1,183 page likes, Pacific Debt Relief
+  is very unlikely to register in any panel at all &mdash; so the data would be missing precisely where
+  variation is needed.</p>
+
+  <h3>When it is the right call</h3>
+  <p>Budget exists, US impressions are genuinely required, and the write-up can carry
+  &ldquo;vendor-estimated&rdquo; as a stated limitation that reviewers will accept.</p>
+</section>
+
+<section class="card">
+  <div class="route"><span class="n">2</span><div>
+    <h2>Academic access via Meta Content Library</h2>
+    <p class="lede">Free for qualifying researchers &mdash; but read the cost structure carefully</p>
+  </div></div>
+
+  <h3>The cost structure changed in January 2026</h3>
+  <p>Meta's own page states there are no fees for access or computation. The ICPSR terms, as documented
+  by Bellingcat, say free compute on SOMAR's Virtual Data Enclave <b>ended 31 December 2025</b>, and from
+  January 2026 SOMAR charges <b>$371/month per research team</b> plus a <b>one-time $1,000</b>
+  project-start fee for new teams. API work on <b>Meta's own Secure Research Environment remains
+  free</b>. <span class="tag t-third">Third-party</span></p>
+  <p>These are two different routes selected at application time, and the choice determines whether
+  this costs nothing or roughly <b>$5,500 per year</b>. Choose the Meta SRE.</p>
+
+  <h3>Process and limits</h3>
+  <ul>
+    <li>Applications go through ICPSR at the University of Michigan; review typically takes
+        <b>2&ndash;6 weeks</b>. The UI and the API have separate application steps.</li>
+    <li>Eligibility: affiliation with an academic institution, or a not-for-profit whose core activity
+        is scientific or public-interest research. <span class="tag t-official">Official</span></li>
+    <li>Retrieval is capped at <b>500,000 records per rolling seven days</b> per researcher &mdash; far
+        more than 40 companies would require. Rate limits are 60 synchronous searches/minute.</li>
+  </ul>
+
+  <h3>The catch to plan around</h3>
+  <p>Content Library covers public Pages, posts, groups and events, with reactions, shares, views and
+  comments. <b>It contains no ads.</b> What you would be measuring is organic engagement on these
+  companies' Facebook Pages &mdash; a proxy for brand attention, defensible because its provenance is
+  clean, but not ad exposure. A post cannot be linked to an ad, and dark-posted ads never appear at all.</p>
+</section>
+
+<section class="card">
+  <div class="route"><span class="n">3</span><div>
+    <h2>Proxies from data obtainable today</h2>
+    <p class="lede">Free, reproducible, and honest about what it measures</p>
+  </div></div>
+
+  <h3>Advertising effort &mdash; already built</h3>
+  <p><code>ad_days</code> from the Meta pipeline and ad counts from the Google Transparency side.
+  These measure effort, not exposure, and should be described that way.</p>
+
+  <h3>Brand search volume &mdash; the strongest addition</h3>
+  <p>The Google Ads API Keyword Planner returns monthly search volume for brand terms
+  (&ldquo;national debt relief&rdquo; and so on), which is a direct attention signal and responds to
+  advertising.</p>
+  <p><b>The gotcha:</b> accounts without recent ad spend receive bucketed ranges
+  (<code>1K&ndash;10K</code>) rather than exact numbers. Reports suggest $50&ndash;100 of spend lifts
+  this within a day or two, though no official Google statement confirms that threshold. Basic API
+  access allows 15,000 operations/day. <span class="tag t-third">Third-party</span></p>
+  <p>Do not substitute Google Trends: the official Trends API remains <b>alpha and
+  application-only</b>, and pytrends is archived and rate-limited.</p>
+
+  <h3>Site traffic &mdash; the weakest link</h3>
+  <p>SimilarWeb estimates are expensive, and site traffic reflects far more than advertising.
+  Include only if something else already justifies the subscription.</p>
+</section>
+
+<section class="card key">
+  <h2>The most useful thing found &mdash; CFPB complaints
+      <span class="tag t-verified">Verified live</span></h2>
+  <p>The CFPB Consumer Complaint Database API is open, requires no key, and was queried directly while
+  compiling this note. Filtering <code>product = Debt or credit management &bull; Debt settlement</code>
+  from January 2023:</p>
+  <p><b>5,727 complaints across 724 companies</b>, each carrying company, date received, state, issue
+  and company response &mdash; already at company &times; month resolution.</p>
+
+  <pre><code>curl "https://www.consumerfinance.gov/data-research/consumer-complaints/\
+search/api/v1/?product=Debt%20or%20credit%20management%E2%80%A2Debt%20settlement\
+&amp;date_received_min=2023-01-01&amp;size=0"</code></pre>
+
+  <h3>Top companies by complaint volume since 2023</h3>
+  <p class="lede">Settlement firms are the study population; counterparties appear because they are the
+  creditor or furnisher side of the same complaint and should be filtered out.</p>
+  <table>
+    <thead><tr><th>Company</th><th class="num">Complaints</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td>Consumer Financial Services Solutions, Inc.</td><td class="num">325</td><td>Settlement firm</td></tr>
+      <tr><td>National Debt Relief LLC</td><td class="num">315</td><td>Settlement firm</td></tr>
+      <tr><td>Encore Capital Group Inc.</td><td class="num">298</td><td class="muted">Debt buyer</td></tr>
+      <tr><td>Freedom Financial Network</td><td class="num">238</td><td>Settlement firm</td></tr>
+      <tr><td>Resurgent Capital Services L.P.</td><td class="num">159</td><td class="muted">Debt buyer</td></tr>
+      <tr><td>The J. G. Wentworth Company</td><td class="num">140</td><td>Settlement firm</td></tr>
+      <tr><td>Experian Information Solutions Inc.</td><td class="num">138</td><td class="muted">Credit bureau</td></tr>
+      <tr><td>Capital One Financial Corporation</td><td class="num">109</td><td class="muted">Creditor</td></tr>
+      <tr><td>Americor Funding, LLC</td><td class="num">102</td><td>Settlement firm</td></tr>
+      <tr><td>TransUnion Intermediate Holdings, Inc.</td><td class="num">99</td><td class="muted">Credit bureau</td></tr>
+      <tr><td>CL Holdings LLC</td><td class="num">97</td><td>Settlement firm</td></tr>
+      <tr><td>Michel Law, LLC d/b/a Level One Law</td><td class="num">86</td><td>Settlement firm</td></tr>
+      <tr><td>ClearOne Advantage, LLC</td><td class="num">78</td><td>Settlement firm</td></tr>
+      <tr><td>Five Lakes Law Group PLLC</td><td class="num">61</td><td>Settlement firm</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Why this matters twice over</h3>
+  <p>It supplies an <b>outcome variable</b> at the right resolution, and a <b>sampling frame</b>. That
+  724-company list, filtered to actual settlement firms, is the route from five companies to thirty or
+  forty &mdash; which directly addresses the statistical problem below.</p>
+</section>
+
+<section class="card">
+  <h2>Recommended design</h2>
+  <div class="chain">
+    <div class="step"><b>Advertising effort</b><span>ad-days (Meta), ad counts (Google)</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="step"><b>Attention</b><span>brand search volume (Keyword Planner)</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="step"><b>Outcome</b><span>CFPB complaints per company-month</span></div>
+  </div>
+  <p>A company &times; month panel, roster expanded to roughly 40 firms drawn from the CFPB company
+  list. Every input is free, every source documented, and the whole chain is reproducible from the
+  scripts already in this repository.</p>
+  <p><b>On statistical power.</b> Three advertisers across twelve months is not a dataset &mdash; only
+  three of the five companies advertise on Meta at all, and the Google side currently spans a 12-month
+  window. Forty firms across three years is a workable panel, and within-firm variation over time is
+  the identification strategy that makes the correlation meaningful.</p>
+  <p><b>The honest caveat.</b> CFPB provides complaints, not settlement amounts. Dollars settled are
+  not available from any free API &mdash; the routes are company disclosures, AFCC industry data, state
+  regulator filings and court records, most of which are not machine-readable. Whether
+  complaints-as-outcome answers the research question should be settled before any further data work,
+  because it determines the entire plan.</p>
+</section>
+
+<section class="card refs">
+  <h2>References</h2>
+
+  <h3>Platform documentation</h3>
+  <ol>
+    <li><a href="https://www.facebook.com/ads/library/api">Meta Ad Library API</a>
+        &mdash; access requirements and field list. <span class="src">facebook.com</span></li>
+    <li><a href="https://developers.facebook.com/docs/graph-api/reference/ads_archive/">Graph API
+        <code>ads_archive</code> reference</a> &mdash; parameters, political-only fields, error codes.
+        <span class="src">developers.facebook.com</span></li>
+    <li><a href="https://transparency.meta.com/researchtools/meta-content-library/">Meta Content Library
+        and API</a> &mdash; eligibility, data scope, engagement fields, stated fee position.
+        <span class="src">transparency.meta.com</span></li>
+    <li><a href="https://developers.google.com/google-ads/api/docs/keyword-planning/generate-keyword-ideas">Google
+        Ads API &mdash; Generate Keyword Ideas</a> &mdash; Keyword Planner volume retrieval.
+        <span class="src">developers.google.com</span></li>
+    <li><a href="https://developers.google.com/search/blog/2025/07/trends-api">Introducing the Google
+        Trends API (alpha)</a> &mdash; announced 24 July 2025, still application-only.
+        <span class="src">developers.google.com</span></li>
+    <li><a href="https://cfpb.github.io/api/ccdb/">CFPB Consumer Complaint Database API</a>
+        &mdash; publication rules, daily updates, field reference.
+        <span class="src">cfpb.github.io</span></li>
+  </ol>
+
+  <h3>Researcher access</h3>
+  <ol start="7">
+    <li><a href="https://bellingcat.gitbook.io/toolkit/more/all-tools/meta-content-library">Bellingcat
+        &mdash; Meta Content Library guide</a> &mdash; source for the January 2026 SOMAR fees, the
+        2&ndash;6 week review window and the 500,000-record cap.
+        <span class="src">bellingcat.gitbook.io</span></li>
+    <li><a href="https://www.icpsr.umich.edu/sites/icpsr/news/icpsr-to-facilitate-researcher-access-to-metas-api-products">ICPSR
+        to facilitate researcher access to Meta's API products</a> &mdash; application route and SOMAR
+        enclave. <span class="src">icpsr.umich.edu</span></li>
+    <li><a href="https://about.fb.com/news/2023/11/new-tools-to-support-independent-research/">Meta
+        &mdash; New tools to support independent research</a> &mdash; original Content Library
+        announcement. <span class="src">about.fb.com</span></li>
+  </ol>
+
+  <h3>Scope limits and vendor landscape <span class="tag t-third">Third-party</span></h3>
+  <ol start="10">
+    <li><a href="https://adpitstop.com/en/guides/ad-library-api">Ad Library API: who gets access, and
+        why commercial ads outside the EU are not in it</a>. <span class="src">adpitstop.com</span></li>
+    <li><a href="https://www.oppira.com/guides/meta-ad-library-eu-data/">Meta Ad Library in the EU: the
+        extra reach and audience data</a>. <span class="src">oppira.com</span></li>
+    <li><a href="https://adlibrary.com/posts/ad-transparency-data-landscape">Ad transparency data 2026:
+        seven platform libraries compared</a>. <span class="src">adlibrary.com</span></li>
+    <li><a href="https://adlibrary.com/posts/best-ad-intelligence-tools-2026">Best ad intelligence tools
+        2026</a> &mdash; Pathmatics, AdClarity and Adyntel positioning and pricing.
+        <span class="src">adlibrary.com</span></li>
+    <li><a href="https://www.searchapi.io/google-ads-transparency-center-api">SearchAPI &mdash; Google Ads
+        Transparency Center API</a> &mdash; the route currently used in this project.
+        <span class="src">searchapi.io</span></li>
+  </ol>
+
+  <h3>Ad Library API access troubleshooting</h3>
+  <ol start="15">
+    <li><a href="https://github.com/facebookresearch/Ad-Library-API-Script-Repository/issues/22">facebookresearch
+        &mdash; &ldquo;Application does not have permission for this action&rdquo; (issue 22)</a> &mdash;
+        error 10 / subcode 2332002 resolved by identity confirmation, not token scopes.
+        <span class="src">github.com</span></li>
+    <li><a href="https://www.facebook.com/ID">facebook.com/ID</a> &mdash; the identity confirmation step
+        that gates <code>ads_archive</code>. <span class="src">facebook.com</span></li>
+  </ol>
+</section>
+
+<footer>
+  Compiled 28 October 2026 &middot; claims marked
+  <span class="tag t-official">Official</span>
+  <span class="tag t-verified">Verified live</span>
+  <span class="tag t-third">Third-party</span>
+  according to source &middot; third-party figures should be confirmed with the vendor before being
+  relied upon in published work.
+</footer>
+
+</main></body></html>
